@@ -15,8 +15,6 @@ import com.sherlock.gb.kotlin.lessons.viewmodel.MainViewModel
 
 class MainFragment : Fragment() {
 
-
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -47,16 +45,25 @@ class MainFragment : Fragment() {
         }
 
         /**
-         * Уважаемая viewModel,верни свою liveData
-         * Я в ней сейчас скажу ей скажу, слушай внимательно до тех пор слушай пока мой viewLifecycleOwner
-         * т.е. viewLifecycleOwner - это некий объект внутри фрагмента, который за счёт  LifecycleOwner знает жив ли фрагмент
+         * Уважаемая viewModel,верни свою liveData (viewModel.getData())
+         * и подпиши меня как слушателя (observe()),
+         * ориентируясь на мой жизненный цикл (viewLifecycleOwner)
          *
-         * т.е. я говорю liveData (которая сидит во viewModel (viewModel.getData())), подпиши меня как слушателя (observe()) , ориентируясь на мой жизненный цикл,
+         * т.е. viewLifecycleOwner - это некий объект внутри фрагмента,
+         * который за счёт LifecycleOwner знает жив ли фрагмент
+         *
+         * т.е. я говорю liveData (которая сидит во viewModel (viewModel.getData())),
+         * подпиши меня как слушателя (observe()), ориентируясь на мой жизненный цикл,
+         *
          * т.е. я слушаю, пока существую (viewLifecycleOwner) и жду от тебя callback (observer)
          * при callback будет вызываться onChanged из observer
          */
         viewModel.getData().observe(viewLifecycleOwner,observer)
 
+        /**
+         * постучим в свою viewModel и запросим у него getWeather()
+         * дальше сработает триггер onChanged после того, как будет обновлена liveData в MainViewModel
+         */
         viewModel.getWeather()
     }
 
