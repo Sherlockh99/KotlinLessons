@@ -1,7 +1,6 @@
 package com.sherlock.gb.kotlin.lessons.view.main
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -10,20 +9,30 @@ import android.widget.Toast
 
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.sherlock.gb.kotlin.lessons.R
+import com.sherlock.gb.kotlin.lessons.databinding.FragmentMainBinding
+import com.sherlock.gb.kotlin.lessons.viewmodel.AppState
 import com.sherlock.gb.kotlin.lessons.viewmodel.MainViewModel
 
 class MainFragment : Fragment() {
 
+    lateinit var binding: FragmentMainBinding
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_main, container, false)
+    ): View {
+
+        /**
+         * надуваем сгенерированный класс
+         */
+        binding = FragmentMainBinding.inflate(inflater, container, false)
+
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         /**
          * ViewModelProvider (хранилище) запоминает MainViewModel::class.java,
          * если даже активити была пересоздана
@@ -38,8 +47,8 @@ class MainFragment : Fragment() {
          * создаём Observer, который по триггеру срабатывает и выполняет что-то
          * (событие onChanged)
          */
-        val observer = object:Observer<Any>{
-            override fun onChanged(data: Any) {
+        val observer = object:Observer<AppState>{
+            override fun onChanged(data: AppState) {
                 renderData(data)
             }
         }
@@ -67,9 +76,19 @@ class MainFragment : Fragment() {
         viewModel.getWeather()
     }
 
-    private fun renderData(data:Any){
-        Log.d("data",data.toString())
-        Toast.makeText(requireContext(),"data",Toast.LENGTH_LONG).show()
+    private fun renderData(data:AppState){
+        when (data){
+            is AppState.Error -> {
+                binding.loadingLayout.visibility = View.GONE
+            }
+            is AppState.Loading -> {
+                binding.loadingLayout.visibility = View.VISIBLE
+            }
+            is AppState.Success -> {
+                binding.loadingLayout.visibility = View.GONE
+                Toast.makeText(requireContext(),"data",Toast.LENGTH_LONG).show()
+            }
+        }
     }
 
     companion object {

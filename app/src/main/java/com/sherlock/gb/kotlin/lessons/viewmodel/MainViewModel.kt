@@ -4,7 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import java.lang.Thread.sleep
 
-class MainViewModel (private val liveData : MutableLiveData<Any> = MutableLiveData()): ViewModel(
+class MainViewModel (private val liveData : MutableLiveData<AppState> = MutableLiveData()): ViewModel(
 ){
     /**
      * liveData - объект, который хранит данные.
@@ -16,14 +16,15 @@ class MainViewModel (private val liveData : MutableLiveData<Any> = MutableLiveDa
 
     fun getWeather(){
         Thread{
-            sleep(1000)
+            liveData.postValue(AppState.Loading)
+            sleep(2000L)
             /**
              * liveData может изменяться синхронно и асинхронно
              * синхронно (value) - это обновление в том же потоке, что и выполняется.
              * В данном случае так нельзя.
              * Необходимо обновление в главном потоке (асинхронно), используя метод postValue()
              */
-            liveData.postValue(Any())
+            liveData.postValue(AppState.Success(Any()))
         }.start()
     }
 }
