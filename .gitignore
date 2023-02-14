@@ -13,3 +13,5 @@
 .externalNativeBuild
 .cxx
 local.properties
+/app/src/androidTest/java/com/sherlock/gb/kotlin/lessons/ExampleInstrumentedTest.kt
+/app/src/test/java/com/sherlock/gb/kotlin/lessons/ExampleUnitTest.kt
