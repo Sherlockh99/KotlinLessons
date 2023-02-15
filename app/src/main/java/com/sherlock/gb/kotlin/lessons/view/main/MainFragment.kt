@@ -8,7 +8,7 @@ import android.view.ViewGroup
 
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.sherlock.gb.kotlin.lessons.R
+import com.google.android.material.snackbar.Snackbar
 import com.sherlock.gb.kotlin.lessons.databinding.FragmentMainBinding
 import com.sherlock.gb.kotlin.lessons.viewmodel.AppState
 import com.sherlock.gb.kotlin.lessons.viewmodel.MainViewModel
@@ -80,8 +80,9 @@ class MainFragment : Fragment() {
         when (data){
             is AppState.Error -> {
                 binding.loadingLayout.visibility = View.GONE
-                val s = R.string.failed_to_do.toString() + ": " + data.error
+                val s = "Do not work"
                 binding.message.text = s
+                Snackbar.make(binding.mainView,s,Snackbar.LENGTH_LONG).show()
 
             }
             is AppState.Loading -> {
@@ -89,7 +90,9 @@ class MainFragment : Fragment() {
             }
             is AppState.Success -> {
                 binding.loadingLayout.visibility = View.GONE
-                binding.message.text = "Получилось"
+                val s = "Work"
+                binding.message.text = s
+                Snackbar.make(binding.mainView,s,Snackbar.LENGTH_LONG).show()
             }
         }
     }
