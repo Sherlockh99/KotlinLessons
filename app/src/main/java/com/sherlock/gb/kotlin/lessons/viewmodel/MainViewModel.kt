@@ -18,13 +18,17 @@ class MainViewModel (private val liveData : MutableLiveData<AppState> = MutableL
         Thread{
             liveData.postValue(AppState.Loading)
             sleep(2000L)
-            /**
-             * liveData может изменяться синхронно и асинхронно
-             * синхронно (value) - это обновление в том же потоке, что и выполняется.
-             * В данном случае так нельзя.
-             * Необходимо обновление в главном потоке (асинхронно), используя метод postValue()
-             */
-            liveData.postValue(AppState.Success(Any()))
+            if((0..10).random()>5) {
+                /**
+                 * liveData может изменяться синхронно и асинхронно
+                 * синхронно (value) - это обновление в том же потоке, что и выполняется.
+                 * В данном случае так нельзя.
+                 * Необходимо обновление в главном потоке (асинхронно), используя метод postValue()
+                 */
+                liveData.postValue(AppState.Success(Any()))
+            }else{
+                liveData.postValue(AppState.Error(IllegalAccessException()))
+            }
         }.start()
     }
 }
