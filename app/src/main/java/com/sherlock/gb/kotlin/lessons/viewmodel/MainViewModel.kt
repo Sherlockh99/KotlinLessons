@@ -22,13 +22,15 @@ class MainViewModel (
             liveData.postValue(AppState.Loading)
 
             if((0..10).random()>5) {
+                val answer = repository.getWeatherFromServer()
+                //TODO HW параметр с переключателем - локально или сервер
                 /**
                  * liveData может изменяться синхронно и асинхронно
                  * синхронно (value) - это обновление в том же потоке, что и выполняется.
                  * В данном случае так нельзя.
                  * Необходимо обновление в главном потоке (асинхронно), используя метод postValue()
                  */
-                liveData.postValue(AppState.Success(repository.getWeatherFromServer()))
+                liveData.postValue(AppState.Success(answer))
             }else{
                 liveData.postValue(AppState.Error(IllegalAccessException()))
             }
