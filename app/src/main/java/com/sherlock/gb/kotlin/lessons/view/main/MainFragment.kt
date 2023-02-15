@@ -9,7 +9,9 @@ import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.snackbar.Snackbar
+import com.sherlock.gb.kotlin.lessons.R
 import com.sherlock.gb.kotlin.lessons.databinding.FragmentMainBinding
+import com.sherlock.gb.kotlin.lessons.repository.Weather
 import com.sherlock.gb.kotlin.lessons.viewmodel.AppState
 import com.sherlock.gb.kotlin.lessons.viewmodel.MainViewModel
 
@@ -81,7 +83,6 @@ class MainFragment : Fragment() {
             is AppState.Error -> {
                 binding.loadingLayout.visibility = View.GONE
                 val s = "Do not work"
-                binding.message.text = s
                 Snackbar.make(binding.mainView,s,Snackbar.LENGTH_LONG).show()
 
             }
@@ -90,10 +91,23 @@ class MainFragment : Fragment() {
             }
             is AppState.Success -> {
                 binding.loadingLayout.visibility = View.GONE
+                setData(data.weatherData)
                 val s = "Work"
-                binding.message.text = s
                 Snackbar.make(binding.mainView,s,Snackbar.LENGTH_LONG).show()
             }
+        }
+    }
+
+    private fun setData(weatherData: Weather) {
+        binding.apply {
+            cityName.text = weatherData.city.name
+            cityCoordinates.text = String.format(
+                getString(R.string.city_coordinates),
+                weatherData.city.lat.toString(),
+                weatherData.city.lon.toString()
+            )
+            temperatureValue.text = weatherData.temperature.toString()
+            feelsLikeValue.text = weatherData.feelsLike.toString()
         }
     }
 

@@ -2,9 +2,12 @@ package com.sherlock.gb.kotlin.lessons.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import java.lang.Thread.sleep
+import com.sherlock.gb.kotlin.lessons.repository.RepositoryImpl
 
-class MainViewModel (private val liveData : MutableLiveData<AppState> = MutableLiveData()): ViewModel(
+class MainViewModel (
+    private val liveData : MutableLiveData<AppState> = MutableLiveData(),
+    private val repository : RepositoryImpl = RepositoryImpl()
+): ViewModel(
 ){
     /**
      * liveData - объект, который хранит данные.
@@ -17,7 +20,7 @@ class MainViewModel (private val liveData : MutableLiveData<AppState> = MutableL
     fun getWeather(){
         Thread{
             liveData.postValue(AppState.Loading)
-            sleep(2000L)
+
             if((0..10).random()>5) {
                 /**
                  * liveData может изменяться синхронно и асинхронно
@@ -25,7 +28,7 @@ class MainViewModel (private val liveData : MutableLiveData<AppState> = MutableL
                  * В данном случае так нельзя.
                  * Необходимо обновление в главном потоке (асинхронно), используя метод postValue()
                  */
-                liveData.postValue(AppState.Success(Any()))
+                liveData.postValue(AppState.Success(repository.getWeatherFromServer()))
             }else{
                 liveData.postValue(AppState.Error(IllegalAccessException()))
             }
