@@ -21,7 +21,7 @@ class MainViewModel (
         Thread{
             liveData.postValue(AppState.Loading)
 
-            if((0..10).random()>5) {
+            if((0..10).random()>0) {
                 val answer = repository.getWeatherFromServer()
                 //TODO HW параметр с переключателем - локально или сервер
                 /**
