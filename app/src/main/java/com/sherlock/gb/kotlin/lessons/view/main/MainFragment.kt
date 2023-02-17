@@ -78,7 +78,7 @@ class MainFragment : Fragment() {
         viewModel.getWeather()
     }
 
-        private fun renderData(data:AppState){
+    private fun renderData(data:AppState){
         when (data){
             is AppState.Error -> {
                 binding.loadingLayout.visibility = View.GONE
