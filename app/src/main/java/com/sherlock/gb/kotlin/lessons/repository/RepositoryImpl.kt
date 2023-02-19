@@ -10,7 +10,7 @@ class RepositoryImpl : Repository {
         return getWorldCities() //эмуляция ответа
     }
 
-    override fun getWeatherFromLocalStorage(): List<Weather> {
+    override fun getRussianWeatherFromLocalStorage(): List<Weather> {
         return getRussianCities()
     }
 }

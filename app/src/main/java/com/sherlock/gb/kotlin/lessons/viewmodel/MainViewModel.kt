@@ -17,13 +17,17 @@ class MainViewModel (
 
     fun getData() = liveData
 
-    fun getWeather(){
+    fun getWeatherRussia() = getWeather(true)
+    fun getWeatherWorld() = getWeather(false)
+
+    private fun getWeather(isRussian: Boolean){
         Thread{
             liveData.postValue(AppState.Loading)
 
             if((0..10).random()>0) {
-                val answer = repository.getWeatherFromServer()
-                //TODO HW параметр с переключателем - локально или сервер
+
+                val answer = if(!isRussian) repository.getRussianWeatherFromLocalStorage() else repository.getWorldWeatherFromLocalStorage()
+
                 /**
                  * liveData может изменяться синхронно и асинхронно
                  * синхронно (value) - это обновление в том же потоке, что и выполняется.
