@@ -1,4 +1,4 @@
-package com.sherlock.gb.kotlin.lessons.view.main
+package com.sherlock.gb.kotlin.lessons.view.details
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

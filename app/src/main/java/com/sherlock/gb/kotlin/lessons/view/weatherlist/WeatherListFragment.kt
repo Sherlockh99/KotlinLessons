@@ -1,4 +1,4 @@
-package com.sherlock.gb.kotlin.lessons.view.main
+package com.sherlock.gb.kotlin.lessons.view.weatherlist
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -20,6 +20,8 @@ class WeatherListFragment : Fragment() {
         get(){
             return _binding!!
         }
+
+    val adapter = WeatherListAdapter()
 
     override fun onDestroy() {
         super.onDestroy()
@@ -52,6 +54,8 @@ class WeatherListFragment : Fragment() {
          */
         val viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
 
+        binding.recyclerView.adapter = adapter
+
         /**
          * создаём Observer, который по триггеру срабатывает и выполняет что-то
          * (событие onChanged)
@@ -82,7 +86,7 @@ class WeatherListFragment : Fragment() {
          * постучим в свою viewModel и запросим у него getWeather()
          * дальше сработает триггер onChanged после того, как будет обновлена liveData в MainViewModel
          */
-        //viewModel.getWeather()
+        viewModel.getWeatherRussia()
     }
 
     private fun renderData(data:AppState){
@@ -98,29 +102,29 @@ class WeatherListFragment : Fragment() {
             }
             is AppState.Success -> {
                 binding.loadingLayout.visibility = View.GONE
-                //setData(data.weatherData)
+                adapter.setData(data.weatherList)
                 val s = "Work"
                 Snackbar.make(binding.root,s,Snackbar.LENGTH_LONG).show()
             }
         }
     }
 
-    /*
-private fun setData(weatherData: Weather) {
+/**
+    private fun setData(weatherData: List<Weather>) {
 
-binding.apply {
-    cityName.text = weatherData.city.name
-    cityCoordinates.text = String.format(
-        getString(R.string.city_coordinates),
-        weatherData.city.lat.toString(),
-        weatherData.city.lon.toString()
-    )
-    temperatureValue.text = weatherData.temperature.toString()
-    feelsLikeValue.text = weatherData.feelsLike.toString()
-}
-
+        binding.apply {
+            cityName.text = weatherData.city.name
+            cityCoordinates.text = String.format(
+                getString(R.string.city_coordinates),
+                weatherData.city.lat.toString(),
+                weatherData.city.lon.toString()
+            )
+            temperatureValue.text = weatherData.temperature.toString()
+            feelsLikeValue.text = weatherData.feelsLike.toString()
+        }
     }
  */
+
     companion object {
         @JvmStatic
         fun newInstance() = WeatherListFragment()

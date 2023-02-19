@@ -3,7 +3,7 @@ package com.sherlock.gb.kotlin.lessons.view
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.sherlock.gb.kotlin.lessons.R
-import com.sherlock.gb.kotlin.lessons.view.main.WeatherListFragment
+import com.sherlock.gb.kotlin.lessons.view.weatherlist.WeatherListFragment
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

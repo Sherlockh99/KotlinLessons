@@ -26,7 +26,7 @@ class MainViewModel (
 
             if((0..10).random()>0) {
 
-                val answer = if(!isRussian) repository.getRussianWeatherFromLocalStorage() else repository.getWorldWeatherFromLocalStorage()
+                val answer = if(isRussian) repository.getRussianWeatherFromLocalStorage() else repository.getWorldWeatherFromLocalStorage()
 
                 /**
                  * liveData может изменяться синхронно и асинхронно
