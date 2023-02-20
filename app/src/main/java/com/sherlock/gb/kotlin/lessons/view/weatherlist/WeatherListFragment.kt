@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.snackbar.Snackbar
+import com.sherlock.gb.kotlin.lessons.R
 import com.sherlock.gb.kotlin.lessons.databinding.FragmentWeatherListBinding
 import com.sherlock.gb.kotlin.lessons.viewmodel.AppState
 import com.sherlock.gb.kotlin.lessons.viewmodel.MainViewModel
@@ -22,6 +23,8 @@ class WeatherListFragment : Fragment() {
         }
 
     val adapter = WeatherListAdapter()
+
+    var isRussian = true
 
     override fun onDestroy() {
         super.onDestroy()
@@ -82,6 +85,16 @@ class WeatherListFragment : Fragment() {
          */
         viewModel.getData().observe(viewLifecycleOwner,observer)
 
+        binding.floatingActionButton.setOnClickListener{
+            isRussian = !isRussian
+            if(isRussian){
+                viewModel.getWeatherRussia()
+                binding.floatingActionButton.setImageResource(R.drawable.ic_earth)
+            }else{
+                viewModel.getWeatherWorld()
+                binding.floatingActionButton.setImageResource(R.drawable.ic_russia)
+            }
+        }
         /**
          * постучим в свою viewModel и запросим у него getWeather()
          * дальше сработает триггер onChanged после того, как будет обновлена liveData в MainViewModel
