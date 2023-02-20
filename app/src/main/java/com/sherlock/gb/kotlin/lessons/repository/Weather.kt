@@ -1,9 +1,13 @@
 package com.sherlock.gb.kotlin.lessons.repository
 
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
+
+@Parcelize
 data class Weather(
     val city: City = getDefaultCity(),
     val temperature: Int = 0,
-    val feelsLike: Int = 0)
+    val feelsLike: Int = 0):Parcelable
 
 fun getWorldCities(): List<Weather> {
     return listOf(
