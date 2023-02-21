@@ -100,7 +100,8 @@ class WeatherListFragment : Fragment(), OnItemListClickListener {
         }
         /**
          * постучим в свою viewModel и запросим у него getWeather()
-         * дальше сработает триггер onChanged после того, как будет обновлена liveData в MainViewModel
+         * дальше сработает триггер onChanged после того,
+         * как будет обновлена liveData в MainViewModel
          */
         viewModel.getWeatherRussia()
     }
@@ -124,22 +125,6 @@ class WeatherListFragment : Fragment(), OnItemListClickListener {
             }
         }
     }
-
-/**
-    private fun setData(weatherData: List<Weather>) {
-
-        binding.apply {
-            cityName.text = weatherData.city.name
-            cityCoordinates.text = String.format(
-                getString(R.string.city_coordinates),
-                weatherData.city.lat.toString(),
-                weatherData.city.lon.toString()
-            )
-            temperatureValue.text = weatherData.temperature.toString()
-            feelsLikeValue.text = weatherData.feelsLike.toString()
-        }
-    }
- */
 
     companion object {
         @JvmStatic
