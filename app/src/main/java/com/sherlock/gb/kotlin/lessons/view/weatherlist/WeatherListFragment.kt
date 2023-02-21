@@ -11,10 +11,13 @@ import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.snackbar.Snackbar
 import com.sherlock.gb.kotlin.lessons.R
 import com.sherlock.gb.kotlin.lessons.databinding.FragmentWeatherListBinding
+import com.sherlock.gb.kotlin.lessons.repository.Weather
+import com.sherlock.gb.kotlin.lessons.utils.KEY_BUNDLE_WEATHER
+import com.sherlock.gb.kotlin.lessons.view.details.DetailsFragment
 import com.sherlock.gb.kotlin.lessons.viewmodel.AppState
 import com.sherlock.gb.kotlin.lessons.viewmodel.MainViewModel
 
-class WeatherListFragment : Fragment() {
+class WeatherListFragment : Fragment(), OnItemListClickListener {
 
     private var _binding: FragmentWeatherListBinding? = null
     private val binding:FragmentWeatherListBinding
@@ -22,7 +25,7 @@ class WeatherListFragment : Fragment() {
             return _binding!!
         }
 
-    val adapter = WeatherListAdapter()
+    val adapter = WeatherListAdapter(this)
 
     var isRussian = true
 
@@ -141,5 +144,16 @@ class WeatherListFragment : Fragment() {
     companion object {
         @JvmStatic
         fun newInstance() = WeatherListFragment()
+    }
+
+    override fun onItemClick(weather: Weather) {
+        val bundle = Bundle()
+        bundle.putParcelable(KEY_BUNDLE_WEATHER,weather)
+        requireActivity()
+            .supportFragmentManager
+            .beginTransaction()
+            .add(R.id.container, DetailsFragment.newInstance(bundle))
+            .addToBackStack("")
+            .commit()
     }
 }
