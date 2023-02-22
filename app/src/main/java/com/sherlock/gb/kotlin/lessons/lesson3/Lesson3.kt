@@ -1,8 +1,10 @@
 package com.sherlock.gb.kotlin.lessons.lesson3
 
 import android.util.Log
+import com.sherlock.gb.kotlin.lessons.lesson4.Speakable
 
-class Lesson3 {
+class Lesson3: Speakable {
+
     fun usual1(string: String){ //1 способ
         Log.d("@@@", "Сообщение $string")
         //"some произошло"
@@ -14,4 +16,13 @@ class Lesson3 {
         //"some произошло"
     }
 
+    override fun f(string: String) { //3.1 способ
+        Log.d("@@@", "Сообщение $string")
+    }
+
+    val callback = object: Speakable{ //3.2 способ
+        override fun f(string: String) {
+            Log.d("@@@", "Сообщение $string")
+        }
+    }
 }
