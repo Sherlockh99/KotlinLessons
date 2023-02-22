@@ -22,7 +22,10 @@ class MainActivity : AppCompatActivity() {
         val lesson3 = Lesson3()
         val lesson4 = Lesson4()
         lesson4.lesson3 = lesson3
-        lesson4.some()
+        lesson4.some1()
+
+        lesson4.f = lesson3.f
+        lesson4.some2()
     }
 
     /*
