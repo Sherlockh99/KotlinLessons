@@ -51,7 +51,11 @@ class MainActivity : AppCompatActivity() {
         */
 
         //4.2 способ
-        lesson4.some6 { string, i -> Log.d("@@@","Сообщение $string") }
+
+        lesson4.some6 { string, i  ->
+            Log.d("@@@","Сообщение $string")
+            1.0   }
+
 
     }
 
@@ -61,4 +65,7 @@ class MainActivity : AppCompatActivity() {
     val object1:Objects = t
     val any1:Any = object1
     */
+    /**
+     *
+     */
 }

@@ -29,12 +29,12 @@ class Lesson4 {
 
     //4.1 способ
     fun some5(){
-        speakable.f("Что-то произошло, 3.2 способ",5)
+        speakable.f("Что-то произошло, 4.1 способ",5)
     }
 
     //4.2 способ
     fun some6(_speakable: Speakable){
-        _speakable.f("Что-то произошло, 3.2 способ",6)
+        _speakable.f("Что-то произошло, 4.2 способ",6)
     }
 
 }

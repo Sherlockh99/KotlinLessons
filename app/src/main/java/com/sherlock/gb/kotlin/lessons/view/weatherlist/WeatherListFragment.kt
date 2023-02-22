@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.snackbar.Snackbar
 import com.sherlock.gb.kotlin.lessons.R
@@ -66,11 +65,14 @@ class WeatherListFragment : Fragment(), OnItemListClickListener {
          * создаём Observer, который по триггеру срабатывает и выполняет что-то
          * (событие onChanged)
          */
+        /*
         val observer = object:Observer<AppState>{
             override fun onChanged(data: AppState) {
                 renderData(data)
             }
         }
+        */
+        val observer = {data: AppState -> renderData(data)}
 
         /**
          * Уважаемая viewModel,верни свою liveData (viewModel.getData())
