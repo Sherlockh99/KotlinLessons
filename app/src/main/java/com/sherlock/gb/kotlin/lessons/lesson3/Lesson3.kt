@@ -25,4 +25,10 @@ class Lesson3: Speakable {
             Log.d("@@@", "Сообщение $string")
         }
     }
+
+    //4.1 способ
+    val callbackLambda1 = Speakable { string -> Log.d("@@@", "Сообщение $string") }
+
+    //4.2 способ
+    val callbackLambda2 = { string:String -> Log.d("@@@", "Сообщение $string") }
 }
