@@ -51,7 +51,7 @@ class MainActivity : AppCompatActivity() {
         */
 
         //4.2 способ
-        lesson4.some6 { string -> Log.d("@@@","Сообщение $string") }
+        lesson4.some6 { string, i -> Log.d("@@@","Сообщение $string") }
 
     }
 

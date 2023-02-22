@@ -19,22 +19,22 @@ class Lesson4 {
     //3.1 способ
     lateinit var speakable: Speakable
     fun some3(){
-        speakable.f("Что-то произошло, 3.1 способ")
+        speakable.f("Что-то произошло, 3.1 способ",3)
     }
 
     //3.2 способ
     fun some4(){
-        speakable.f("Что-то произошло, 3.2 способ")
+        speakable.f("Что-то произошло, 3.2 способ",4)
     }
 
     //4.1 способ
     fun some5(){
-        speakable.f("Что-то произошло, 3.2 способ")
+        speakable.f("Что-то произошло, 3.2 способ",5)
     }
 
     //4.2 способ
     fun some6(_speakable: Speakable){
-        _speakable.f("Что-то произошло, 3.2 способ")
+        _speakable.f("Что-то произошло, 3.2 способ",6)
     }
 
 }

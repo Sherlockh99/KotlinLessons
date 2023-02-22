@@ -16,19 +16,19 @@ class Lesson3: Speakable {
         //"some произошло"
     }
 
-    override fun f(string: String) { //3.1 способ
+    override fun f(string: String, i: Int) { //3.1 способ
         Log.d("@@@", "Сообщение $string")
     }
 
     val callback = object: Speakable{ //3.2 способ
-        override fun f(string: String) {
+        override fun f(string: String, i: Int) {
             Log.d("@@@", "Сообщение $string")
         }
     }
 
     //4.1 способ
-    val callbackLambda1 = Speakable { string -> Log.d("@@@", "Сообщение $string") }
+    val callbackLambda1 = Speakable { string, i -> Log.d("@@@", "Сообщение $string") }
 
     //4.2 способ
-    val callbackLambda2 = { string:String -> Log.d("@@@", "Сообщение $string") }
+    val callbackLambda2 = { string:String, i: Int -> Log.d("@@@", "Сообщение $string") }
 }
