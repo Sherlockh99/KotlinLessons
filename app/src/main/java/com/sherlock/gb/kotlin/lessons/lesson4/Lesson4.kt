@@ -50,7 +50,7 @@ class Lesson4 {
     }
 
 
-    fun funHigh(_f:(float:Float)-> Unit,
+    private fun funHigh(_f:(float:Float)-> Unit,
                 __f:(double:Double)->Short,
                 _c:(char:Char)->Boolean){
 
@@ -62,5 +62,6 @@ class Lesson4 {
     fun main(){
         funHigh(_f, __f, _c)
     }
+
 
 }

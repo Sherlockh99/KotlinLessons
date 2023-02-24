@@ -56,7 +56,12 @@ class MainActivity : AppCompatActivity() {
             Log.d("@@@","Сообщение $string")
             1.0   }
 
+        lesson4.was()
+    }
 
+
+    fun Lesson4.was(){
+        Log.d("@@@","Был на уроке")
     }
 
     /*
