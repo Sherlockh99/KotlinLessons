@@ -1,5 +1,6 @@
 package com.sherlock.gb.kotlin.lessons.lesson4
 
+import android.util.Log
 import com.sherlock.gb.kotlin.lessons.lesson3.Lesson3
 
 class Lesson4 {
@@ -63,5 +64,7 @@ class Lesson4 {
         funHigh(_f, __f, _c)
     }
 
-
+    fun was(){
+        Log.d("@@@","Не был на уроке")
+    }
 }
