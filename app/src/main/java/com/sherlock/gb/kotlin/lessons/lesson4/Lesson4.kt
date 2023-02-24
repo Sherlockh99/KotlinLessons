@@ -37,4 +37,30 @@ class Lesson4 {
         _speakable.f("Что-то произошло, 4.2 способ",6)
     }
 
+    val _f = fun (float: Float){
+
+    }
+
+    val __f = fun (double: Double):Short{
+        return 1
+    }
+
+    val _c = fun (char: Char):Boolean{
+        return true
+    }
+
+
+    fun funHigh(_f:(float:Float)-> Unit,
+                __f:(double:Double)->Short,
+                _c:(char:Char)->Boolean){
+
+        _f(1f)
+        val short = __f(1.0)
+        val boolean = _c('f')
+    }
+
+    fun main(){
+        funHigh(_f, __f, _c)
+    }
+
 }
