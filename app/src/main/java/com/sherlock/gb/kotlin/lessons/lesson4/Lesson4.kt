@@ -1,7 +1,12 @@
 package com.sherlock.gb.kotlin.lessons.lesson4
 
 import android.util.Log
+import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
+import com.sherlock.gb.kotlin.lessons.R
+import com.sherlock.gb.kotlin.lessons.lesson1.Person
 import com.sherlock.gb.kotlin.lessons.lesson3.Lesson3
+import com.sherlock.gb.kotlin.lessons.view.MainActivity
 
 class Lesson4 {
 
@@ -10,6 +15,8 @@ class Lesson4 {
     fun some1(){
         lesson3.usual1("some произошло")
     }
+
+    val pr = 777
 
     //2 сопсоб
     var f = fun (string: String){}
@@ -60,9 +67,73 @@ class Lesson4 {
         val boolean = _c('f')
     }
 
-    fun main(){
+    private val person: Person? = Person("testName",20)
+
+    fun main(mainActivity: MainActivity){
         funHigh(_f, __f, _c)
+
+        Log.d("@@@","До $person")
+        //если t не null, то мы попадаем в функцию let (внутрь {})
+        val newPersonLet = person?.let {
+            it.age = 10
+            it.name = "LetName"
+            1
+        }
+        Log.d("@@@","После let $person")
+
+        val newPersonRun = person?.run {
+            //this.age = 10
+            //this.name = "ddd"
+            age = 99
+            name = "RunName"
+
+            this@Lesson4.pr
+
+            2
+        }
+
+        Log.d("@@@","После run $person")
+
+        val newPersonAlso = person?.also {
+            it.age = 55
+            it.name = "AlsoName"
+        }
+        Log.d("@@@","После also $person")
+
+        val newPersonApply = person?.apply {
+            age = 66
+            name = "ApplyName"
+            4
+        }
+        Log.d("@@@","После apply $person")
+
+        Log.d("@@@","Результат Let $newPersonLet")
+        Log.d("@@@","Результат Run $newPersonRun")
+        Log.d("@@@","Результат Also $newPersonAlso")
+        Log.d("@@@","Результат Apply $newPersonApply")
+
+        with(person!!){
+            age = 33
+            name = "WithName"
+        }
+        // 1ый способ некорректный)
+        val textView = TextView(mainActivity)
+        textView.text = "ddddd"
+        textView.textSize = 30f
+
+        mainActivity.findViewById<ConstraintLayout>(R.id.layout).addView(textView)
+
+        // 2ой способ корректный)
+        mainActivity.findViewById<ConstraintLayout>(R.id.layout).addView(TextView(mainActivity).apply {
+            text = "ddddd"
+            textSize = 30f
+        })
+
+
     }
+
+    //val t:String? = null
+
 
     fun was(){
         Log.d("@@@","Не был на уроке")

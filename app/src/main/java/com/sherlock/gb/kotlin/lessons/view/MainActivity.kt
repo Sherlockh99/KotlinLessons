@@ -57,11 +57,15 @@ class MainActivity : AppCompatActivity() {
             1.0   }
 
         lesson4.was()
+
+        lesson4.main(this)
+
+
     }
 
 
     fun Lesson4.was(){
-        Log.d("@@@","Был на уроке")
+        Log.d("@@@","Был на уроке $pr")
     }
 
     /*
@@ -71,6 +75,6 @@ class MainActivity : AppCompatActivity() {
     val any1:Any = object1
     */
     /**
-     * 1:40:15
+     * 2:29:00
      */
 }
