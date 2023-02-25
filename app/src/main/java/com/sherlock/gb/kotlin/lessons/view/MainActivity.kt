@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.util.Log
 import com.sherlock.gb.kotlin.lessons.R
 import com.sherlock.gb.kotlin.lessons.lesson3.Lesson3
+import com.sherlock.gb.kotlin.lessons.lesson4.BaseImpl
+import com.sherlock.gb.kotlin.lessons.lesson4.BossDelegate
 import com.sherlock.gb.kotlin.lessons.lesson4.Lesson4
 import com.sherlock.gb.kotlin.lessons.view.weatherlist.WeatherListFragment
 
@@ -58,7 +60,12 @@ class MainActivity : AppCompatActivity() {
                 1.0   }
 
             was()
-            main(this@MainActivity)
+            //main(this@MainActivity)
+        }
+
+        val worker = BaseImpl()
+        BossDelegate(worker,worker).apply {
+            manipulate()
         }
     }
 

@@ -29,6 +29,14 @@ class WeatherListFragment : Fragment(), OnItemListClickListener {
 
     var isRussian = true
 
+    /**
+     * viewModel будет инициилизована лямдой при первом обращении к ней,
+     * до этого viewModel = null
+     */
+    private val viewModel: MainViewModel by lazy {
+        ViewModelProvider(this).get(MainViewModel::class.java)
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
@@ -49,10 +57,6 @@ class WeatherListFragment : Fragment(), OnItemListClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.recyclerView.apply {
-            this.adapter = adapter
-            layoutManager = LinearLayoutManager(requireContext())
-        }
 
         /**
          * ViewModelProvider (хранилище) запоминает MainViewModel::class.java,
@@ -62,7 +66,22 @@ class WeatherListFragment : Fragment(), OnItemListClickListener {
          * Если же существует (фрагмент пересоздался, например),
          * то вернёт уже ранее созданную MainViewModel со всеми сохраненными в ней данными
          */
-        val viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
+        //val viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
+
+        /** 1 вариант
+        binding.recyclerView.apply {
+            adapter = this@WeatherListFragment.adapter
+            layoutManager = LinearLayoutManager(requireContext())
+        }
+        */
+
+        /** 2 вариант **/
+        binding.recyclerView.also {
+            it.adapter = adapter
+            it.layoutManager = LinearLayoutManager(requireContext())
+        }
+
+
 
         /**
          * создаём Observer, который по триггеру срабатывает и выполняет что-то
@@ -92,7 +111,17 @@ class WeatherListFragment : Fragment(), OnItemListClickListener {
          * при callback будет вызываться onChanged из observer
          */
         viewModel.getData().observe(viewLifecycleOwner,observer)
+        setupFab()
 
+        /**
+         * постучим в свою viewModel и запросим у него getWeather()
+         * дальше сработает триггер onChanged после того,
+         * как будет обновлена liveData в MainViewModel
+         */
+        viewModel.getWeatherRussia()
+    }
+
+    private fun setupFab() {
         binding.floatingActionButton.setOnClickListener{
             isRussian = !isRussian
             if(isRussian){
@@ -103,13 +132,8 @@ class WeatherListFragment : Fragment(), OnItemListClickListener {
                 binding.floatingActionButton.setImageResource(R.drawable.ic_russia)
             }
         }
-        /**
-         * постучим в свою viewModel и запросим у него getWeather()
-         * дальше сработает триггер onChanged после того,
-         * как будет обновлена liveData в MainViewModel
-         */
-        viewModel.getWeatherRussia()
     }
+
 
     private fun renderData(data:AppState){
         when (data){

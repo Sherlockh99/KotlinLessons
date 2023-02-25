@@ -116,14 +116,14 @@ class Lesson4 {
             age = 33
             name = "WithName"
         }
-        // 1ый способ некорректный)
+
+        /** 1ый способ некорректный) **/
         val textView = TextView(mainActivity)
         textView.text = "ddddd"
         textView.textSize = 30f
-
         mainActivity.findViewById<ConstraintLayout>(R.id.layout).addView(textView)
 
-        // 2ой способ корректный)
+        /** 2ой способ корректный) **/
         mainActivity.findViewById<ConstraintLayout>(R.id.layout).addView(TextView(mainActivity).apply {
             text = "ddddd"
             textSize = 30f
