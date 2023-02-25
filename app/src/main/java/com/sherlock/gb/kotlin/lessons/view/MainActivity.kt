@@ -23,44 +23,43 @@ class MainActivity : AppCompatActivity() {
         val lesson3 = Lesson3()
         val lesson4 = Lesson4()
 
-        //1 способ
-        lesson4.lesson3 = lesson3
-        lesson4.some1()
+        with(lesson4){
+            //1 способ
+            this.lesson3 = lesson3
+            some1()
 
-        //2 способ
-        lesson4.f = lesson3.f
-        lesson4.some2()
+            //2 способ
+            f = lesson3.f
+            some2()
 
-        //3.1 способ
-        lesson4.speakable = lesson3  //ссылается на реализацию в классе lesson3 (обрезает всё лишнее)
-        lesson4.some3()
+            //3.1 способ
+            speakable = lesson3  //ссылается на реализацию в классе lesson3 (обрезает всё лишнее)
+            some3()
 
-        //3.2 способ
-        lesson4.speakable = lesson3.callback
-        lesson4.some4()
+            //3.2 способ
+            speakable = lesson3.callback
+            some4()
 
-        //4.1 способ
-        lesson4.speakable = lesson3.callbackLambda1
-        lesson4.some5()
+            //4.1 способ
+            speakable = lesson3.callbackLambda1
+            some5()
 
-        /*
-        почему-то выдает ошибку
-        //4.2 способ
-        lesson4.speakable = lesson3.callbackLambda2
-        lesson4.some6()
-        */
+            /*
+            почему-то выдает ошибку
+            //4.2 способ
+            lesson4.speakable = lesson3.callbackLambda2
+            lesson4.some6()
+            */
 
-        //4.2 способ
+            //4.2 способ
 
-        lesson4.some6 { string, i  ->
-            Log.d("@@@","Сообщение $string")
-            1.0   }
+            some6 { string, i  ->
+                Log.d("@@@","Сообщение $string")
+                1.0   }
 
-        lesson4.was()
-
-        lesson4.main(this)
-
-
+            was()
+            main(this@MainActivity)
+        }
     }
 
 

@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.sherlock.gb.kotlin.lessons.R
 import com.sherlock.gb.kotlin.lessons.databinding.FragmentWeatherListBinding
@@ -24,7 +25,7 @@ class WeatherListFragment : Fragment(), OnItemListClickListener {
             return _binding!!
         }
 
-    val adapter = WeatherListAdapter(this)
+    private val adapter = WeatherListAdapter(this)
 
     var isRussian = true
 
@@ -48,6 +49,10 @@ class WeatherListFragment : Fragment(), OnItemListClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.recyclerView.apply {
+            this.adapter = adapter
+            layoutManager = LinearLayoutManager(requireContext())
+        }
 
         /**
          * ViewModelProvider (хранилище) запоминает MainViewModel::class.java,
@@ -58,8 +63,6 @@ class WeatherListFragment : Fragment(), OnItemListClickListener {
          * то вернёт уже ранее созданную MainViewModel со всеми сохраненными в ней данными
          */
         val viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
-
-        binding.recyclerView.adapter = adapter
 
         /**
          * создаём Observer, который по триггеру срабатывает и выполняет что-то
@@ -134,12 +137,12 @@ class WeatherListFragment : Fragment(), OnItemListClickListener {
     }
 
     override fun onItemClick(weather: Weather) {
-        val bundle = Bundle()
-        bundle.putParcelable(KEY_BUNDLE_WEATHER,weather)
         requireActivity()
             .supportFragmentManager
             .beginTransaction()
-            .add(R.id.container, DetailsFragment.newInstance(bundle))
+            .add(R.id.container, DetailsFragment.newInstance(Bundle().apply {
+                putParcelable(KEY_BUNDLE_WEATHER,weather)
+            }))
             .addToBackStack("")
             .commit()
     }

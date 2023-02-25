@@ -5,10 +5,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.google.android.material.snackbar.Snackbar
 import com.sherlock.gb.kotlin.lessons.R
 import com.sherlock.gb.kotlin.lessons.databinding.FragmentDetailsBinding
 import com.sherlock.gb.kotlin.lessons.repository.Weather
 import com.sherlock.gb.kotlin.lessons.utils.KEY_BUNDLE_WEATHER
+import kotlinx.android.synthetic.main.fragment_details.*
 
 class DetailsFragment : Fragment() {
 
@@ -39,8 +41,9 @@ class DetailsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val weather: Weather = requireArguments().getParcelable<Weather>(KEY_BUNDLE_WEATHER)!!
-        renderData(weather)
+        arguments?.getParcelable<Weather>(KEY_BUNDLE_WEATHER)?.let {
+            renderData(it)
+        }
     }
 
 
@@ -56,8 +59,13 @@ class DetailsFragment : Fragment() {
                 weather.city.lon.toString()
             )
         }
+        //Snackbar.make(mainView,"Получилось",Snackbar.LENGTH_LONG).show() //TODO вынести в функцию расширения
+        mainView.showSnackBar(mainView,"Получилось")
     }
 
+    fun View.showSnackBar(view: View, text: String){
+        Snackbar.make(view,text,Snackbar.LENGTH_LONG).show()
+    }
 
     companion object {
         @JvmStatic
