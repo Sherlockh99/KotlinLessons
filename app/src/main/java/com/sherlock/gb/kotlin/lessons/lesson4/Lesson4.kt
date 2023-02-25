@@ -128,12 +128,9 @@ class Lesson4 {
             text = "ddddd"
             textSize = 30f
         })
-
-
     }
 
     //val t:String? = null
-
 
     fun was(){
         Log.d("@@@","Не был на уроке")
