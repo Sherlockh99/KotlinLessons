@@ -1,5 +1,6 @@
 package com.sherlock.gb.kotlin.lessons.view
 
+import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
@@ -13,12 +14,15 @@ import javax.net.ssl.HttpsURLConnection
 
 class MainActivityWebView : AppCompatActivity() {
     lateinit var binding: ActivityMainWebviewBinding
+    @SuppressLint("SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainWebviewBinding.inflate(layoutInflater)
         setContentView(binding.root)
         binding.ok.setOnClickListener {
             val urlText = binding.etTextUrl.text.toString()
+
+            /*** вариант 1, детальный ***/
             val uri = URL(urlText)
 
             //создаем соединение
@@ -29,6 +33,7 @@ class MainActivityWebView : AppCompatActivity() {
             }
 
             Thread{
+                val headers = urlCollection.headerFields
                 //получаем и поместим в буфер сайт
                 val buffer = BufferedReader(InputStreamReader(urlCollection.inputStream))
                 val result = getLinesAsOneBigText(buffer)
@@ -45,6 +50,7 @@ class MainActivityWebView : AppCompatActivity() {
                 //"под капотом", второй вариант вызова = аналог первому
                 **/
                 Handler(Looper.getMainLooper()).post{
+                    binding.webview.settings.javaScriptEnabled = true
                     binding.webview.loadDataWithBaseURL(
                         null,
                         result,
@@ -55,6 +61,10 @@ class MainActivityWebView : AppCompatActivity() {
 
 
             }.start()
+
+            /**** варинат 2 ***/
+            //binding.webview.loadUrl(urlText)
+            /****/
 
         }
     }
