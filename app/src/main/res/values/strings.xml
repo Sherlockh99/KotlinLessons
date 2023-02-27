@@ -8,4 +8,6 @@
     <string name="it_is_working">It is working</string>
     <string name="flag">Flag</string>
     <string name="looking_for">Looking for:</string>
+    <string name="ok">OK</string>
+    <string name="https_ed_text_url">https://developer.alexanderklimov.ru/android/</string>
 </resources>
