@@ -2,6 +2,7 @@ package com.sherlock.gb.kotlin.lessons.repository
 
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import com.google.gson.Gson
 import com.sherlock.gb.kotlin.lessons.repository.xdto.WeatherDTO
 import java.io.BufferedReader
@@ -26,19 +27,27 @@ class WeatherLoader(private val onServerResponseListener: OnServerResponse) {
             try{
                 val headers = urlCollection.headerFields
                 val responseCode = urlCollection.responseCode
-                //получаем и поместим в буфер сайт
-                val buffer = BufferedReader(InputStreamReader(urlCollection.inputStream))
-                val weatherDTO: WeatherDTO = Gson().fromJson(buffer,WeatherDTO::class.java)
+                val responseMessage = urlCollection.responseMessage
 
-                /**
-                 * получим указатель на главный поток (Handler)
-                 * через его управляющего (Looper.getMainLooper())
-                 * и ему туда добавили новую задачу
-                 * (onServerResponseListener.onResponse(weatherDTO))
-                 */
-                Handler(Looper.getMainLooper()).post{onServerResponseListener.onResponse(weatherDTO)}
+                if(responseCode>=500){
+
+                }else if(responseCode>=400){
+
+                }else if(responseCode in 200..299){
+                    //получаем и поместим в буфер сайт
+                    val buffer = BufferedReader(InputStreamReader(urlCollection.inputStream))
+                    val weatherDTO: WeatherDTO = Gson().fromJson(buffer,WeatherDTO::class.java)
+
+                    /**
+                     * получим указатель на главный поток (Handler)
+                     * через его управляющего (Looper.getMainLooper())
+                     * и ему туда добавили новую задачу
+                     * (onServerResponseListener.onResponse(weatherDTO))
+                     */
+                    Handler(Looper.getMainLooper()).post{onServerResponseListener.onResponse(weatherDTO)}
+                }
             }catch (e: Exception){
-
+                Log.e("Error get weather",e.toString())
             }finally {
                 urlCollection.disconnect()
             }
