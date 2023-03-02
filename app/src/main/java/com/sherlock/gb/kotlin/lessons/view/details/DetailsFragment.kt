@@ -8,11 +8,14 @@ import android.view.ViewGroup
 import com.google.android.material.snackbar.Snackbar
 import com.sherlock.gb.kotlin.lessons.R
 import com.sherlock.gb.kotlin.lessons.databinding.FragmentDetailsBinding
+import com.sherlock.gb.kotlin.lessons.repository.OnServerResponse
 import com.sherlock.gb.kotlin.lessons.repository.Weather
+import com.sherlock.gb.kotlin.lessons.repository.WeatherLoader
+import com.sherlock.gb.kotlin.lessons.repository.xdto.WeatherDTO
 import com.sherlock.gb.kotlin.lessons.utils.KEY_BUNDLE_WEATHER
 import kotlinx.android.synthetic.main.fragment_details.*
 
-class DetailsFragment : Fragment() {
+class DetailsFragment : Fragment(), OnServerResponse {
 
     private var _binding: FragmentDetailsBinding? = null
     private val binding:FragmentDetailsBinding
@@ -38,25 +41,30 @@ class DetailsFragment : Fragment() {
         return binding.root
     }
 
-
+    //lateinit var localWeather : Weather
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         arguments?.getParcelable<Weather>(KEY_BUNDLE_WEATHER)?.let {
-            renderData(it)
+            //renderData(it)
+            //localWeather = it
+            //Thread{
+                WeatherLoader(this@DetailsFragment).loadWeather(it.city.lat,it.city.lon)
+            //}.start()
+
         }
     }
 
-
-    private fun renderData(weather: Weather){
+    private fun renderData(weather: WeatherDTO){
         binding.apply {
             loadingLayout.visibility = View.GONE
-            cityName.text = weather.city.name
-            temperatureValue.text = weather.temperature.toString()
-            feelsLikeValue.text = weather.feelsLike.toString()
+            //cityName.text = localWeather.city.name
+            cityName.text = weather.location.name
+            temperatureValue.text = weather.current.tempC.toString()
+            feelsLikeValue.text = weather.current.feelslikeC.toString()
             cityCoordinates.text = String.format(
                 getString(R.string.city_coordinates),
-                weather.city.lat.toString(),
-                weather.city.lon.toString()
+                weather.location.lat.toString(),
+                weather.location.lon.toString()
             )
         }
         //Snackbar.make(mainView,"Получилось",Snackbar.LENGTH_LONG).show() //TODO вынести в функцию расширения
@@ -74,6 +82,10 @@ class DetailsFragment : Fragment() {
             fragment.arguments = bundle
             return fragment
         }
+    }
+
+    override fun onResponse(weatherDTO: WeatherDTO) {
+        renderData(weatherDTO)
     }
 
 }
