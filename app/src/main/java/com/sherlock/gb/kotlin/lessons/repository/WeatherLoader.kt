@@ -29,11 +29,15 @@ class WeatherLoader(private val onServerResponseListener: OnServerResponse) {
                 val responseCode = urlCollection.responseCode
                 val responseMessage = urlCollection.responseMessage
 
-                if(responseCode>=500){
+                val serverSide = 500 //диапазон ошибок
+                val clientSide = 400..499 //диапазон ошибок
+                val responnse = 200..299
 
-                }else if(responseCode>=400){
+                if(responseCode>=serverSide){
 
-                }else if(responseCode in 200..299){
+                }else if(responseCode in clientSide){
+
+                }else if(responseCode in responnse){
                     //получаем и поместим в буфер сайт
                     val buffer = BufferedReader(InputStreamReader(urlCollection.inputStream))
                     val weatherDTO: WeatherDTO = Gson().fromJson(buffer,WeatherDTO::class.java)
@@ -44,7 +48,8 @@ class WeatherLoader(private val onServerResponseListener: OnServerResponse) {
                      * и ему туда добавили новую задачу
                      * (onServerResponseListener.onResponse(weatherDTO))
                      */
-                    Handler(Looper.getMainLooper()).post{onServerResponseListener.onResponse(weatherDTO)}
+                    Handler(Looper.getMainLooper()).post{
+                        onServerResponseListener.onResponse(weatherDTO)}
                 }
             }catch (e: Exception){
                 Log.e("Error get weather",e.toString())
