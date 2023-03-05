@@ -9,9 +9,8 @@ import com.sherlock.gb.kotlin.lessons.repository.Weather
 
 class WeatherListAdapter(
     private val onItemListClickListener: OnItemListClickListener,
-    private var data: List<Weather> = listOf())
-:
-    RecyclerView.Adapter<WeatherListAdapter.CityHolder>() {
+    private var data: List<Weather> = listOf()
+): RecyclerView.Adapter<WeatherListAdapter.CityHolder>() {
 
     fun setData(dataNew:List<Weather>){
         this.data = dataNew

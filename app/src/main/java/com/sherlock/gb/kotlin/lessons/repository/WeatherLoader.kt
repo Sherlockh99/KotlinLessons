@@ -5,12 +5,14 @@ import android.os.Looper
 import android.util.Log
 import com.google.gson.Gson
 import com.sherlock.gb.kotlin.lessons.repository.xdto.WeatherDTO
+import com.sherlock.gb.kotlin.lessons.viewmodel.ResponseState
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.net.URL
 import javax.net.ssl.HttpsURLConnection
 
-class WeatherLoader(private val onServerResponseListener: OnServerResponse) {
+class WeatherLoader(private val onServerResponseListener: OnServerResponse,
+                    private val onErrorListener: OnServerResponseListener) {
 
     fun loadWeather(lat: Double, lon: Double){
         val urlText = "https://api.weatherapi.com/v1/forecast.json?q=$lat,$lon&lang=ru"
@@ -34,9 +36,11 @@ class WeatherLoader(private val onServerResponseListener: OnServerResponse) {
                 val responnse = 200..299
 
                 if(responseCode>=serverSide){
-
+                    Handler(Looper.getMainLooper()).post{
+                        onErrorListener.onError(ResponseState.ServerSide)}
                 }else if(responseCode in clientSide){
-
+                    Handler(Looper.getMainLooper()).post{
+                        onErrorListener.onError(ResponseState.ClientSide(responseCode))}
                 }else if(responseCode in responnse){
                     //получаем и поместим в буфер сайт
                     val buffer = BufferedReader(InputStreamReader(urlCollection.inputStream))
