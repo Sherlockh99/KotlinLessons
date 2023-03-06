@@ -3,11 +3,14 @@ package com.sherlock.gb.kotlin.lessons.view
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import com.sherlock.gb.kotlin.lessons.R
 import com.sherlock.gb.kotlin.lessons.lesson3.Lesson3
 import com.sherlock.gb.kotlin.lessons.lesson4.BaseImpl
 import com.sherlock.gb.kotlin.lessons.lesson4.BossDelegate
 import com.sherlock.gb.kotlin.lessons.lesson4.Lesson4
+import com.sherlock.gb.kotlin.lessons.lesson6.ThreadsFragment
 import com.sherlock.gb.kotlin.lessons.view.weatherlist.WeatherListFragment
 
 class MainActivity : AppCompatActivity() {
@@ -67,8 +70,26 @@ class MainActivity : AppCompatActivity() {
         BossDelegate(worker,worker).apply {
             manipulate()
         }
+
+
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu,menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId){
+            R.id.action_threads ->{
+                supportFragmentManager
+                    .beginTransaction()
+                    .replace(R.id.container, ThreadsFragment.newInstance())
+                    .commit()
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
 
     fun Lesson4.was(){
         Log.d("@@@","Был на уроке $pr")
