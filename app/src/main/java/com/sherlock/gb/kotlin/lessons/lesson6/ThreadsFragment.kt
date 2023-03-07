@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 
 import com.sherlock.gb.kotlin.lessons.databinding.FragmentThreadsBinding
 import java.lang.Thread.sleep
@@ -35,24 +36,47 @@ class ThreadsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val myThreads = MyThreads()
+        myThreads.start()
         with(binding){
-            button.setOnClickListener{
+            val time = editText.text.toString().toLong()
+            var counter = 0
+            button1.setOnClickListener{
                 Thread{
-                    val time = editText.text.toString().toLong()
                     val msg = "Поработали плотно $time сек."
                     sleep(time * 1000L)
 
                     //1 метод
                     requireActivity().runOnUiThread{
-                        textView.text = msg
+                        textView1.text = msg
                     }
                     //2 метод
                     Handler(Looper.getMainLooper()).post{
-                        textView.text = msg
+                        textView1.text = msg
+                        createTextView("${Thread.currentThread().name} ${++counter}")
+
                     }
                 }.start()
             }
+
+            //вечный поток
+            button2.setOnClickListener{
+                myThreads.mHandler.post{
+                    val msg = "Поработали плотно $time сек."
+                    sleep(time * 1000L)
+                    Handler(Looper.getMainLooper()).post{
+                        textView2.text = msg
+                        createTextView("${Thread.currentThread().name} ${++counter}")
+                    }
+                }
+            }
         }
+    }
+
+    private fun createTextView(name: String) {
+        binding.mainContainer.addView(TextView(requireContext()).apply {
+            text = name
+            textSize = 14f}
+        )
     }
 
     class MyThreads:Thread(){

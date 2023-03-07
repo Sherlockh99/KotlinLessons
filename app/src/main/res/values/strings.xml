@@ -11,6 +11,6 @@
     <string name="ok">OK</string>
     <string name="https_ed_text_url">https://developer.alexanderklimov.ru/android/</string>
     <string name="calculate">Расчёт</string>
-    <string name="default_number">1</string>
+    <string name="default_number">3</string>
     <string name="threads">Threads</string>
 </resources>
