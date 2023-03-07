@@ -1,5 +1,6 @@
 package com.sherlock.gb.kotlin.lessons.view
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -10,6 +11,7 @@ import com.sherlock.gb.kotlin.lessons.lesson3.Lesson3
 import com.sherlock.gb.kotlin.lessons.lesson4.BaseImpl
 import com.sherlock.gb.kotlin.lessons.lesson4.BossDelegate
 import com.sherlock.gb.kotlin.lessons.lesson4.Lesson4
+import com.sherlock.gb.kotlin.lessons.lesson6.MainService
 import com.sherlock.gb.kotlin.lessons.lesson6.ThreadsFragment
 import com.sherlock.gb.kotlin.lessons.view.weatherlist.WeatherListFragment
 
@@ -25,6 +27,9 @@ class MainActivity : AppCompatActivity() {
                 .commit()
         }
 
+        startService(Intent(this,MainService::class.java))
+
+        /**
         val lesson3 = Lesson3()
         val lesson4 = Lesson4()
 
@@ -70,7 +75,7 @@ class MainActivity : AppCompatActivity() {
         BossDelegate(worker,worker).apply {
             manipulate()
         }
-
+        */
 
     }
 
