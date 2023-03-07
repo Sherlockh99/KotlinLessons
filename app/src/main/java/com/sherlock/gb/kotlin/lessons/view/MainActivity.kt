@@ -1,17 +1,20 @@
 package com.sherlock.gb.kotlin.lessons.view
 
 import android.content.Intent
+import android.content.IntentFilter
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.sherlock.gb.kotlin.lessons.R
 import com.sherlock.gb.kotlin.lessons.lesson3.Lesson3
 import com.sherlock.gb.kotlin.lessons.lesson4.BaseImpl
 import com.sherlock.gb.kotlin.lessons.lesson4.BossDelegate
 import com.sherlock.gb.kotlin.lessons.lesson4.Lesson4
 import com.sherlock.gb.kotlin.lessons.lesson6.MainService
+import com.sherlock.gb.kotlin.lessons.lesson6.MyBroadcastReceiver
 import com.sherlock.gb.kotlin.lessons.lesson6.ThreadsFragment
 import com.sherlock.gb.kotlin.lessons.view.weatherlist.WeatherListFragment
 
@@ -27,7 +30,19 @@ class MainActivity : AppCompatActivity() {
                 .commit()
         }
 
-        startService(Intent(this,MainService::class.java))
+        startService(Intent(this,MainService::class.java).apply {
+            putExtra("key1","Привет сервис")
+        })
+
+        val receiver = MyBroadcastReceiver()
+        registerReceiver(receiver, IntentFilter("myaction")) //на весь мир
+
+        //только на приложение (локально). Использовать или выше или это. Что-то одно
+        /**
+        LocalBroadcastManager.getInstance(this)
+            .registerReceiver(receiver, IntentFilter("myaction"))
+        */
+
 
         /**
         val lesson3 = Lesson3()
