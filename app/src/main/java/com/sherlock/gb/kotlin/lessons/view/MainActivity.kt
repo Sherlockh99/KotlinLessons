@@ -16,6 +16,8 @@ import com.sherlock.gb.kotlin.lessons.lesson4.Lesson4
 import com.sherlock.gb.kotlin.lessons.lesson6.MainService
 import com.sherlock.gb.kotlin.lessons.lesson6.MyBroadcastReceiver
 import com.sherlock.gb.kotlin.lessons.lesson6.ThreadsFragment
+import com.sherlock.gb.kotlin.lessons.utils.KEY_BUNDLE_ACTIVITY_MESSAGE
+import com.sherlock.gb.kotlin.lessons.utils.KEY_WAVE
 import com.sherlock.gb.kotlin.lessons.view.weatherlist.WeatherListFragment
 
 class MainActivity : AppCompatActivity() {
@@ -31,11 +33,11 @@ class MainActivity : AppCompatActivity() {
         }
 
         startService(Intent(this,MainService::class.java).apply {
-            putExtra("key1","Привет сервис")
+            putExtra(KEY_BUNDLE_ACTIVITY_MESSAGE,"Привет сервис")
         })
 
         val receiver = MyBroadcastReceiver()
-        registerReceiver(receiver, IntentFilter("myaction")) //на весь мир
+        registerReceiver(receiver, IntentFilter(KEY_WAVE)) //на весь мир
 
         //только на приложение (локально). Использовать или выше или это. Что-то одно
         /**
