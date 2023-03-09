@@ -1,20 +1,27 @@
 package com.sherlock.gb.kotlin.lessons.view.details
 
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.content.ContextCompat.registerReceiver
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.sherlock.gb.kotlin.lessons.repository.xdto.WeatherDTO
 import com.sherlock.gb.kotlin.lessons.R
 import com.sherlock.gb.kotlin.lessons.databinding.FragmentDetailsBinding
 import com.sherlock.gb.kotlin.lessons.repository.*
-import com.sherlock.gb.kotlin.lessons.utils.Extensions
-import com.sherlock.gb.kotlin.lessons.utils.KEY_BUNDLE_WEATHER
 import com.sherlock.gb.kotlin.lessons.viewmodel.ResponseState
 import kotlinx.android.synthetic.main.fragment_details.*
 import com.google.android.material.snackbar.Snackbar
+import com.sherlock.gb.kotlin.lessons.lesson6.MyBroadcastReceiver
+import com.sherlock.gb.kotlin.lessons.utils.*
 
 
 class DetailsFragment : Fragment(), OnServerResponse, OnServerResponseListener {
@@ -28,6 +35,7 @@ class DetailsFragment : Fragment(), OnServerResponse, OnServerResponseListener {
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
+        requireContext().unregisterReceiver(receiver)
     }
 
     override fun onCreateView(
@@ -45,15 +53,42 @@ class DetailsFragment : Fragment(), OnServerResponse, OnServerResponseListener {
     //lateinit var localWeather : Weather
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        /*
+        LocalBroadcastManager.getInstance(requireContext()).registerReceiver(receiver,
+            IntentFilter(KEY_WAVE_SERVICE_BROADCAST)
+        )
+
+         */
+        requireContext().registerReceiver(receiver,
+            IntentFilter(KEY_WAVE_SERVICE_BROADCAST)
+        )
+
         arguments?.getParcelable<Weather>(KEY_BUNDLE_WEATHER)?.let {
             localWeather = it
+
+            requireActivity().startService(Intent(requireContext(),DetailsService::class.java).apply {
+                putExtra(KEY_BUNDLE_LAT,localWeather.city.lat)
+                putExtra(KEY_BUNDLE_LON,localWeather.city.lon)
+            })
+
             //renderData(it)
             //localWeather = it
             //Thread{
+            /*
                 WeatherLoader(this@DetailsFragment,
                     this@DetailsFragment).loadWeather(it.city.lat,it.city.lon)
+             */
             //}.start()
+        }
+    }
 
+    private val receiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            intent?.let {intent->
+                intent.getParcelableExtra<WeatherDTO>(KEY_BUNDLE_SERVICE_BROADCAST_WEATHER)?.let{
+                    onResponse(it)
+                }
+            }
         }
     }
 
