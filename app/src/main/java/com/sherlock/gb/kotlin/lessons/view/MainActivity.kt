@@ -38,7 +38,7 @@ class MainActivity : AppCompatActivity() {
 
         val receiver = MyBroadcastReceiver()
         registerReceiver(receiver, IntentFilter(KEY_WAVE)) //на весь мир
-
+        registerReceiver(receiver, IntentFilter("android.intent.action.AIRPLANE_MODE"))
         //только на приложение (локально). Использовать или выше или это. Что-то одно
         /**
         LocalBroadcastManager.getInstance(this)

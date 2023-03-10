@@ -8,6 +8,7 @@ import com.sherlock.gb.kotlin.lessons.utils.KEY_BUNDLE_SERVICE_MESSAGE
 
 class MyBroadcastReceiver:BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
+        Log.d("@@@","MyBroadcastReceiver onReceive ${intent!!.action}")
         intent?.let {
             val extra = it.getStringExtra(KEY_BUNDLE_SERVICE_MESSAGE)
             Log.d("@@@","MyBroadcastReceiver onReceive $extra")
