@@ -8,6 +8,7 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import androidx.work.WorkManager
 import com.sherlock.gb.kotlin.lessons.R
 import com.sherlock.gb.kotlin.lessons.lesson3.Lesson3
 import com.sherlock.gb.kotlin.lessons.lesson4.BaseImpl
@@ -39,6 +40,10 @@ class MainActivity : AppCompatActivity() {
         val receiver = MyBroadcastReceiver()
         registerReceiver(receiver, IntentFilter(KEY_WAVE)) //на весь мир
         registerReceiver(receiver, IntentFilter("android.intent.action.AIRPLANE_MODE"))
+
+        //WorkManager позволяет добавлять в очередь, даже при закрытом приложении (на Samsung работает, на Xiaomi - нет)
+        //WorkManager.getInstance(this).enqueue()
+
         //только на приложение (локально). Использовать или выше или это. Что-то одно
         /**
         LocalBroadcastManager.getInstance(this)
