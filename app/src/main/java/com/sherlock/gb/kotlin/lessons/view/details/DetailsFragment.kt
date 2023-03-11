@@ -5,14 +5,10 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.core.content.ContextCompat.registerReceiver
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.sherlock.gb.kotlin.lessons.repository.xdto.WeatherDTO
 import com.sherlock.gb.kotlin.lessons.R
 import com.sherlock.gb.kotlin.lessons.databinding.FragmentDetailsBinding
@@ -20,8 +16,10 @@ import com.sherlock.gb.kotlin.lessons.repository.*
 import com.sherlock.gb.kotlin.lessons.viewmodel.ResponseState
 import kotlinx.android.synthetic.main.fragment_details.*
 import com.google.android.material.snackbar.Snackbar
-import com.sherlock.gb.kotlin.lessons.lesson6.MyBroadcastReceiver
+import com.google.gson.Gson
 import com.sherlock.gb.kotlin.lessons.utils.*
+import okhttp3.*
+import java.io.IOException
 
 
 class DetailsFragment : Fragment(), OnServerResponse, OnServerResponseListener {
@@ -66,10 +64,12 @@ class DetailsFragment : Fragment(), OnServerResponse, OnServerResponseListener {
         arguments?.getParcelable<Weather>(KEY_BUNDLE_WEATHER)?.let {
             localWeather = it
 
+            /**
             requireActivity().startService(Intent(requireContext(),DetailsService::class.java).apply {
                 putExtra(KEY_BUNDLE_LAT,localWeather.city.lat)
                 putExtra(KEY_BUNDLE_LON,localWeather.city.lon)
             })
+            */
 
             //renderData(it)
             //localWeather = it
@@ -79,13 +79,65 @@ class DetailsFragment : Fragment(), OnServerResponse, OnServerResponseListener {
                     this@DetailsFragment).loadWeather(it.city.lat,it.city.lon)
              */
             //}.start()
+            getWeather(it.city.lat,it.city.lon)
         }
+    }
+
+    private fun getWeather(lat:Double, lon: Double){
+        binding.loadingLayout.visibility = View.VISIBLE
+
+        val client = OkHttpClient()
+        val builder = Request.Builder()
+
+        builder.addHeader(WEATHER_KEY,"68e96e5766d44c9a91f11329231102")
+        builder.url("$WEATHER_DOMAIN$WEATHER_ENDPOINT?q=${lat},${lon}&lang=ru")
+        val request = builder.build()
+        val call = client.newCall(request)
+
+        //*** вариант 1 - асинхронный вызов
+        val callback:Callback = object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                TODO("Not yet implemented")
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+                if(response.isSuccessful){
+                    val weatherDTO: WeatherDTO = Gson().fromJson(response.body()?.string(),WeatherDTO::class.java)
+                    requireActivity().runOnUiThread{
+                        renderData(weatherDTO)
+                    }
+                }
+            }
+        }
+
+        call.enqueue(callback) //помести в очередь, а ответ верни в callback
+
+        //----------- вариант 1
+
+        /**
+        //***************** вариант 2 - синхронный метод
+        Thread{
+            val response = call.execute() //выполнить здесь и сейчас
+            if(response.isSuccessful){
+                val weatherDTO: WeatherDTO = Gson().fromJson(response.body()?.string(),WeatherDTO::class.java)
+                requireActivity().runOnUiThread{
+                    renderData(weatherDTO)
+                }
+            }
+        }.start()
+        */
+        */
+        //-------------------- вариант 2
+
+
+
+        binding.loadingLayout.visibility = View.GONE
     }
 
     private val receiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
-            intent?.let {intent->
-                intent.getParcelableExtra<WeatherDTO>(KEY_BUNDLE_SERVICE_BROADCAST_WEATHER)?.let{
+            intent?.let {
+                it.getParcelableExtra<WeatherDTO>(KEY_BUNDLE_SERVICE_BROADCAST_WEATHER)?.let{
                     onResponse(it)
                 }
             }

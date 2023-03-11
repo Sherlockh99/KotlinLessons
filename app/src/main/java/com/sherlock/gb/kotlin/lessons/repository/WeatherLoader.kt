@@ -8,7 +8,7 @@ import com.google.gson.JsonSyntaxException
 import com.sherlock.gb.kotlin.lessons.repository.xdto.WeatherDTO
 import com.sherlock.gb.kotlin.lessons.utils.WEATHER_DOMAIN
 import com.sherlock.gb.kotlin.lessons.utils.WEATHER_KEY
-import com.sherlock.gb.kotlin.lessons.utils.WEATHER_PATH
+import com.sherlock.gb.kotlin.lessons.utils.WEATHER_ENDPOINT
 import com.sherlock.gb.kotlin.lessons.viewmodel.ResponseState
 import java.io.BufferedReader
 import java.io.InputStreamReader
@@ -19,7 +19,7 @@ class WeatherLoader(private val onServerResponseListener: OnServerResponse,
                     private val onErrorListener: OnServerResponseListener) {
 
     fun loadWeather(lat: Double, lon: Double){
-        val urlText = "$WEATHER_DOMAIN$WEATHER_PATH?q=$lat,$lon&lang=ru"
+        val urlText = "$WEATHER_DOMAIN$WEATHER_ENDPOINT?q=$lat,$lon&lang=ru"
         val uri = URL(urlText)
 
         //создаем соединение

@@ -2,14 +2,11 @@ package com.sherlock.gb.kotlin.lessons.view.details
 
 import android.app.IntentService
 import android.content.Intent
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
 import com.sherlock.gb.kotlin.lessons.repository.xdto.WeatherDTO
 import com.sherlock.gb.kotlin.lessons.utils.*
-import com.sherlock.gb.kotlin.lessons.viewmodel.ResponseState
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.net.URL
@@ -27,7 +24,7 @@ class DetailsService(val name: String=""): IntentService(name) {
 
             Log.d("@@@","Work DetailsService $lat $lon")
 
-            val urlText = "$WEATHER_DOMAIN$WEATHER_PATH?q=$lat,$lon&lang=ru"
+            val urlText = "$WEATHER_DOMAIN$WEATHER_ENDPOINT?q=$lat,$lon&lang=ru"
             val uri = URL(urlText)
 
             val urlCollection: HttpsURLConnection =
