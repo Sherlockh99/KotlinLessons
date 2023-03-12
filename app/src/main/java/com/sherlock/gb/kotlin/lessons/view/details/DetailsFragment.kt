@@ -1,28 +1,20 @@
 package com.sherlock.gb.kotlin.lessons.view.details
 
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.sherlock.gb.kotlin.lessons.repository.xdto.WeatherDTO
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.sherlock.gb.kotlin.lessons.R
 import com.sherlock.gb.kotlin.lessons.databinding.FragmentDetailsBinding
 import com.sherlock.gb.kotlin.lessons.repository.*
-import com.sherlock.gb.kotlin.lessons.viewmodel.ResponseState
-import kotlinx.android.synthetic.main.fragment_details.*
-import com.google.android.material.snackbar.Snackbar
-import com.google.gson.Gson
 import com.sherlock.gb.kotlin.lessons.utils.*
-import okhttp3.*
-import java.io.IOException
+import com.sherlock.gb.kotlin.lessons.viewmodel.DetailsState
+import com.sherlock.gb.kotlin.lessons.viewmodel.DetailsViewModel
 
-
-class DetailsFragment : Fragment(), OnServerResponse, OnServerResponseListener {
+class DetailsFragment : Fragment() {
     lateinit var localWeather: Weather
     private var _binding: FragmentDetailsBinding? = null
     private val binding:FragmentDetailsBinding
@@ -33,7 +25,6 @@ class DetailsFragment : Fragment(), OnServerResponse, OnServerResponseListener {
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
-        requireContext().unregisterReceiver(receiver)
     }
 
     override fun onCreateView(
@@ -48,134 +39,49 @@ class DetailsFragment : Fragment(), OnServerResponse, OnServerResponseListener {
         return binding.root
     }
 
-    //lateinit var localWeather : Weather
+    private val viewModel: DetailsViewModel by lazy {
+        ViewModelProvider(this).get(DetailsViewModel::class.java)
+    }
+
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        /*
-        LocalBroadcastManager.getInstance(requireContext()).registerReceiver(receiver,
-            IntentFilter(KEY_WAVE_SERVICE_BROADCAST)
-        )
 
-         */
-        requireContext().registerReceiver(receiver,
-            IntentFilter(KEY_WAVE_SERVICE_BROADCAST)
-        )
+        viewModel.getLiveData().observe(viewLifecycleOwner,object:Observer<DetailsState>{
+            override fun onChanged(t: DetailsState) {
+                renderData(t)
+            }
+        })
 
         arguments?.getParcelable<Weather>(KEY_BUNDLE_WEATHER)?.let {
             localWeather = it
-
-            /**
-            requireActivity().startService(Intent(requireContext(),DetailsService::class.java).apply {
-                putExtra(KEY_BUNDLE_LAT,localWeather.city.lat)
-                putExtra(KEY_BUNDLE_LON,localWeather.city.lon)
-            })
-            */
-
-            //renderData(it)
-            //localWeather = it
-            //Thread{
-            /*
-                WeatherLoader(this@DetailsFragment,
-                    this@DetailsFragment).loadWeather(it.city.lat,it.city.lon)
-             */
-            //}.start()
-            getWeather(it.city.lat,it.city.lon)
+            viewModel.getWeather(localWeather.city)
         }
     }
 
-    private fun getWeather(lat:Double, lon: Double){
-        binding.loadingLayout.visibility = View.VISIBLE
-
-        val client = OkHttpClient()
-        val builder = Request.Builder()
-
-        builder.addHeader(WEATHER_KEY,"68e96e5766d44c9a91f11329231102")
-        builder.url("$WEATHER_DOMAIN$WEATHER_ENDPOINT?q=${lat},${lon}&lang=ru")
-        val request = builder.build()
-        val call = client.newCall(request)
-
-        //*** вариант 1 - асинхронный вызов
-        val callback:Callback = object : Callback {
-            override fun onFailure(call: Call, e: IOException) {
-                TODO("Not yet implemented")
-            }
-
-            override fun onResponse(call: Call, response: Response) {
-                if(response.isSuccessful){
-                    val weatherDTO: WeatherDTO = Gson().fromJson(response.body()?.string(),WeatherDTO::class.java)
-                    requireActivity().runOnUiThread{
-                        renderData(weatherDTO)
-                    }
+    private fun renderData(detailsState: DetailsState){
+        when(detailsState){
+            is DetailsState.Success -> {
+                val weather =  detailsState.weather
+                binding.apply {
+                    loadingLayout.visibility = View.GONE
+                    cityName.text = weather.city.name
+                    temperatureValue.text = weather.temperature.toString()
+                    feelsLikeValue.text = weather.feelsLike.toString()
+                    cityCoordinates.text = String.format(
+                        getString(R.string.city_coordinates),
+                        weather.city.lat.toString(),
+                        weather.city.lon.toString()
+                    )
                 }
             }
-        }
+            is DetailsState.Error -> {
 
-        call.enqueue(callback) //помести в очередь, а ответ верни в callback
-
-        //----------- вариант 1
-
-        /**
-        //***************** вариант 2 - синхронный метод
-        Thread{
-            val response = call.execute() //выполнить здесь и сейчас
-            if(response.isSuccessful){
-                val weatherDTO: WeatherDTO = Gson().fromJson(response.body()?.string(),WeatherDTO::class.java)
-                requireActivity().runOnUiThread{
-                    renderData(weatherDTO)
-                }
             }
-        }.start()
-        */
-        */
-        //-------------------- вариант 2
+            DetailsState.Loading -> {
 
-
-
-        binding.loadingLayout.visibility = View.GONE
-    }
-
-    private val receiver = object : BroadcastReceiver() {
-        override fun onReceive(context: Context?, intent: Intent?) {
-            intent?.let {
-                it.getParcelableExtra<WeatherDTO>(KEY_BUNDLE_SERVICE_BROADCAST_WEATHER)?.let{
-                    onResponse(it)
-                }
             }
         }
-    }
-
-    private fun renderData(weather: Weather){
-        binding.apply {
-            loadingLayout.visibility = View.GONE
-            cityName.text = weather.city.name
-            temperatureValue.text = weather.temperature.toString()
-            feelsLikeValue.text = weather.feelsLike.toString()
-            cityCoordinates.text = String.format(
-                getString(R.string.city_coordinates),
-                weather.city.lat.toString(),
-                weather.city.lon.toString()
-            )
-        }
-    }
-
-    private fun renderData(weather: WeatherDTO){
-        binding.apply {
-            loadingLayout.visibility = View.GONE
-            cityName.text = weather.location.name
-            temperatureValue.text = weather.current.tempC.toString()
-            feelsLikeValue.text = weather.current.feelslikeC.toString()
-            cityCoordinates.text = String.format(
-                getString(R.string.city_coordinates),
-                weather.location.lat.toString(),
-                weather.location.lon.toString()
-            )
-        }
-        //Snackbar.make(mainView,"Получилось",Snackbar.LENGTH_LONG).show() //TODO вынести в функцию расширения
-        mainView.showSnackBar(mainView,"Получилось")
-    }
-
-    fun View.showSnackBar(view: View, text: String){
-        Snackbar.make(view,text,Snackbar.LENGTH_LONG).show()
     }
 
     companion object {
@@ -187,24 +93,4 @@ class DetailsFragment : Fragment(), OnServerResponse, OnServerResponseListener {
         }
     }
 
-    override fun onResponse(weatherDTO: WeatherDTO) {
-        renderData(weatherDTO)
-    }
-
-    override fun onError(error: ResponseState) {
-        when (error){
-            is ResponseState.ServerSide ->{
-                renderData(localWeather)
-                Extensions.showToast(mainView,
-                    "Ошибка на стороне сервера: $error. Отображены локальные данные")
-            }
-            is ResponseState.ClientSide ->
-            {
-                renderData(localWeather)
-                Extensions.showToast(mainView,
-                    "Ошибка на стороне клиента $error. Отображены локальные данные"
-                )
-            }
-        }
-    }
 }

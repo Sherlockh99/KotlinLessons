@@ -5,6 +5,7 @@ import android.content.Intent
 import android.util.Log
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
+import com.sherlock.gb.kotlin.lessons.BuildConfig
 import com.sherlock.gb.kotlin.lessons.repository.xdto.WeatherDTO
 import com.sherlock.gb.kotlin.lessons.utils.*
 import java.io.BufferedReader
@@ -31,7 +32,7 @@ class DetailsService(val name: String=""): IntentService(name) {
                 (uri.openConnection() as HttpsURLConnection).apply {
                     connectTimeout = 1000 //сколько ждать подключения; под капотом set
                     readTimeout = 1000 //сколько ждать ответа
-                    addRequestProperty(WEATHER_KEY,"68e96e5766d44c9a91f11329231102")
+                    addRequestProperty(WEATHER_KEY, BuildConfig.WEATHER_API_KEY)
                 }
 
             try{
