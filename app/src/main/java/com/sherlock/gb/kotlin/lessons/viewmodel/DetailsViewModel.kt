@@ -6,7 +6,7 @@ import com.sherlock.gb.kotlin.lessons.repository.*
 
 class DetailsViewModel(
     private val liveData: MutableLiveData<DetailsState> = MutableLiveData(),
-    private var repository: DetailsRepository = DetailsRepositoryOkHttpImpl()
+    private var repository: DetailsRepository = DetailsRepositoryOkHttp2Impl()
 ):ViewModel() {
 
     fun getLiveData() = liveData
