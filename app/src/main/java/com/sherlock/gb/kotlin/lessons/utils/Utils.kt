@@ -15,6 +15,8 @@ const val KEY_WAVE_SERVICE_BROADCAST = "myaction_way"
 const val KEY_WAVE = "myaction"
 const val KEY_BUNDLE_LAT = "lat1"
 const val KEY_BUNDLE_LON = "lon1"
+const val WEATHER_QUERY = "q"
+const val WEATHER_LANG = "lang"
 
 fun convertDtoToModel(weatherDTO: WeatherDTO):Weather{
     return Weather(
