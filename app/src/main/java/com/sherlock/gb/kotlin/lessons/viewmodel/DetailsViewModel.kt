@@ -18,11 +18,15 @@ class DetailsViewModel(
             override fun onResponse(weather: Weather) {
                 liveData.postValue(DetailsState.Success(weather))
             }
+
+            override fun onFail() {
+                TODO("Not yet implemented")
+            }
         })
     }
 
-    fun interface Callback {
+    interface Callback {
         fun onResponse(weather: Weather)
-        //TODO HW Fail
+        fun onFail()
     }
 }

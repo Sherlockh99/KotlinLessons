@@ -13,7 +13,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 class DetailsRepositoryRetrofit2Impl: DetailsRepository {
-    override fun getWeatherDetails(city: City, callback: DetailsViewModel.Callback) {
+    override fun getWeatherDetails(city: City, callbackMy: DetailsViewModel.Callback) {
         val weatherAPI = Retrofit.Builder().apply {
             baseUrl(WEATHER_DOMAIN)
             //GsonBuilder().setLenient().create() - чтобы читал даже битый JSON
@@ -26,13 +26,16 @@ class DetailsRepositoryRetrofit2Impl: DetailsRepository {
             override fun onResponse(call: Call<WeatherDTO>, response: Response<WeatherDTO>) {
                 if(response.isSuccessful){
                     response.body()?.let {
-                        callback.onResponse(convertDtoToModel(it))
+                        callbackMy.onResponse(convertDtoToModel(it))
                     }
+                }else{
+                    callbackMy.onFail()
                 }
             }
 
             override fun onFailure(call: Call<WeatherDTO>, t: Throwable) {
                 TODO("Not yet implemented")
+                callbackMy.onFail()
             }
 
         })
