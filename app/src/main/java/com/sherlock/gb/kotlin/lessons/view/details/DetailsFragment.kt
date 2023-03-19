@@ -5,14 +5,21 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import coil.ImageLoader
+import coil.decode.SvgDecoder
+import coil.load
+import coil.request.ImageRequest
+import com.bumptech.glide.Glide
 import com.sherlock.gb.kotlin.lessons.R
 import com.sherlock.gb.kotlin.lessons.databinding.FragmentDetailsBinding
 import com.sherlock.gb.kotlin.lessons.repository.*
 import com.sherlock.gb.kotlin.lessons.utils.*
 import com.sherlock.gb.kotlin.lessons.viewmodel.DetailsState
 import com.sherlock.gb.kotlin.lessons.viewmodel.DetailsViewModel
+import com.squareup.picasso.Picasso
 
 class DetailsFragment : Fragment() {
     lateinit var localWeather: Weather
@@ -73,6 +80,24 @@ class DetailsFragment : Fragment() {
                         weather.city.lat.toString(),
                         weather.city.lon.toString()
                     )
+
+                    val urlIcon = "https:${weather.icon}"
+
+                    /** загрузка иконки с помощью Glide
+                    Glide.with(requireContext())
+                        .load(urlIcon)
+                        .into(icon)
+                    */
+
+                    /** загрузка иконки с помощью Picasso
+                    Picasso.get()?.load(urlIcon)?.into(icon)
+                    */
+
+                    /** загрузка иконки с помощью Coil */
+                    icon.load(urlIcon)
+
+                    headerCityIcon.loadSvg("https://svgsilh.com/svg/1801287.svg")
+                    //headerCityIcon.loadSvg("https://freepngimg.com/thumb/city/36275-3-city-hd.png")
                 }
             }
             is DetailsState.Error -> {
@@ -82,6 +107,24 @@ class DetailsFragment : Fragment() {
 
             }
         }
+    }
+
+    fun ImageView.loadSvg(url: String){
+
+        val imageLoader = ImageLoader.Builder(this.context)
+            .componentRegistry{
+                add(SvgDecoder(this@loadSvg.context))
+            }
+            .build()
+
+        val request = ImageRequest.Builder(requireContext())
+            .crossfade(500)
+            .crossfade(true)
+            .data(url)
+            .target(this)
+            .build()
+
+        imageLoader.enqueue(request)
     }
 
     companion object {

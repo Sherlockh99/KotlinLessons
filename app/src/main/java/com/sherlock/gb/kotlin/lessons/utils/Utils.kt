@@ -22,5 +22,6 @@ fun convertDtoToModel(weatherDTO: WeatherDTO):Weather{
     return Weather(
         City(weatherDTO.location.name,weatherDTO.location.lat,weatherDTO.location.lon),
         weatherDTO.current.tempC.toInt(),
-        weatherDTO.current.feelslikeC.toInt())
+        weatherDTO.current.feelslikeC.toInt(),
+        weatherDTO.current.condition.icon)
 }
