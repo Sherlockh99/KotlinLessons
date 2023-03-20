@@ -17,6 +17,8 @@ const val KEY_BUNDLE_LAT = "lat1"
 const val KEY_BUNDLE_LON = "lon1"
 const val WEATHER_QUERY = "q"
 const val WEATHER_LANG = "lang"
+const val KEY_SP_FILE_NAME_1 = "file_name_1"
+const val KEY_SP_FILE_NAME_IS_WORLD = "file_name_1_is_world"
 
 fun convertDtoToModel(weatherDTO: WeatherDTO):Weather{
     return Weather(

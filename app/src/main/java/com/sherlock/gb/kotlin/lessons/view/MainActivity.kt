@@ -1,5 +1,6 @@
 package com.sherlock.gb.kotlin.lessons.view
 
+import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import androidx.appcompat.app.AppCompatActivity
@@ -18,6 +19,8 @@ import com.sherlock.gb.kotlin.lessons.lesson6.MainService
 import com.sherlock.gb.kotlin.lessons.lesson6.MyBroadcastReceiver
 import com.sherlock.gb.kotlin.lessons.lesson6.ThreadsFragment
 import com.sherlock.gb.kotlin.lessons.utils.KEY_BUNDLE_ACTIVITY_MESSAGE
+import com.sherlock.gb.kotlin.lessons.utils.KEY_SP_FILE_NAME_1
+import com.sherlock.gb.kotlin.lessons.utils.KEY_SP_FILE_NAME_IS_WORLD
 import com.sherlock.gb.kotlin.lessons.utils.KEY_WAVE
 import com.sherlock.gb.kotlin.lessons.view.weatherlist.WeatherListFragment
 
@@ -98,6 +101,14 @@ class MainActivity : AppCompatActivity() {
             manipulate()
         }
         */
+
+        val sp = getSharedPreferences(KEY_SP_FILE_NAME_1,Context.MODE_PRIVATE)
+        val editor = sp.edit()
+        editor.putBoolean(KEY_SP_FILE_NAME_IS_WORLD,true)
+        editor.apply()
+
+        val defaulValueIsWorld = true
+        sp.getBoolean(KEY_SP_FILE_NAME_IS_WORLD,defaulValueIsWorld)
 
     }
 
