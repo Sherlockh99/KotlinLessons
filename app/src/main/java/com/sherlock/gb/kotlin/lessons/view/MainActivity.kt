@@ -10,6 +10,7 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.work.WorkManager
+import com.sherlock.gb.kotlin.lessons.MyApp
 import com.sherlock.gb.kotlin.lessons.R
 import com.sherlock.gb.kotlin.lessons.lesson3.Lesson3
 import com.sherlock.gb.kotlin.lessons.lesson4.BaseImpl
@@ -110,6 +111,7 @@ class MainActivity : AppCompatActivity() {
         val defaulValueIsWorld = true
         sp.getBoolean(KEY_SP_FILE_NAME_IS_WORLD,defaulValueIsWorld)
 
+        MyApp.getHistoryDao().getAll()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
