@@ -5,25 +5,41 @@ import androidx.lifecycle.ViewModel
 import com.sherlock.gb.kotlin.lessons.repository.*
 
 class DetailsViewModel(
-    private val liveData: MutableLiveData<DetailsState> = MutableLiveData(),
-    private val repository: DetailsRepositoryOne = DetailsRepositoryOneRetrofit2Impl(),
-    private val repositoryAdd: DetailsRepositoryAdd = DetailsRepositoryRoomImpl()
+    private val liveData: MutableLiveData<DetailsState> = MutableLiveData()
+    //private val repositoryOne: DetailsRepositoryOne = DetailsRepositoryOneRetrofit2Impl(),
+    //private val repositoryAdd: DetailsRepositoryAdd = DetailsRepositoryRoomImpl()
 ):ViewModel() {
+
+    private var repository: DetailsRepositoryOne = DetailsRepositoryOneRetrofit2Impl()
 
     fun getLiveData() = liveData
 
+
     fun getWeather(city: City){
         liveData.postValue(DetailsState.Loading)
+        if(isInternet()) {
+            repository = DetailsRepositoryOneRetrofit2Impl()
+        }else{
+            repository = DetailsRepositoryRoomImpl()
+        }
+
         repository.getWeatherDetails(city, object : Callback {
             override fun onResponse(weather: Weather) {
                 liveData.postValue(DetailsState.Success(weather))
-                repositoryAdd.addWeather(weather)
+                if(isInternet()) {
+                    val repositoryAdd = DetailsRepositoryRoomImpl()
+                    repositoryAdd.addWeather(weather)
+                }
             }
 
             override fun onFail() {
                 TODO("Not yet implemented")
             }
         })
+    }
+
+    private fun isInternet(): Boolean {
+        return false
     }
 
     interface Callback {
