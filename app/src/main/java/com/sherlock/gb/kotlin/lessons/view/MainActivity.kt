@@ -23,6 +23,7 @@ import com.sherlock.gb.kotlin.lessons.utils.KEY_BUNDLE_ACTIVITY_MESSAGE
 import com.sherlock.gb.kotlin.lessons.utils.KEY_SP_FILE_NAME_1
 import com.sherlock.gb.kotlin.lessons.utils.KEY_SP_FILE_NAME_IS_WORLD
 import com.sherlock.gb.kotlin.lessons.utils.KEY_WAVE
+import com.sherlock.gb.kotlin.lessons.view.historylist.HistoryWeatherListFragment
 import com.sherlock.gb.kotlin.lessons.view.weatherlist.WeatherListFragment
 
 class MainActivity : AppCompatActivity() {
@@ -125,6 +126,14 @@ class MainActivity : AppCompatActivity() {
                 supportFragmentManager
                     .beginTransaction()
                     .replace(R.id.container, ThreadsFragment.newInstance())
+                    .addToBackStack("")
+                    .commit()
+            }
+            R.id.action_history ->{
+                supportFragmentManager
+                    .beginTransaction()
+                    .add(R.id.container, HistoryWeatherListFragment.newInstance())
+                    .addToBackStack("")
                     .commit()
             }
         }

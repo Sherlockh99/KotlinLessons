@@ -1,17 +1,15 @@
-package com.sherlock.gb.kotlin.lessons.view.weatherlist
+package com.sherlock.gb.kotlin.lessons.view.historylist
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.sherlock.gb.kotlin.lessons.databinding.FragmentWeatherListRecyclerItemBinding
+import com.sherlock.gb.kotlin.lessons.databinding.FragmentHistoryWeatherListRecyclerItemBinding
 import com.sherlock.gb.kotlin.lessons.repository.Weather
-import com.sherlock.gb.kotlin.lessons.view.historylist.HistoryWeatherListAdapter
 
-class WeatherListAdapter(
-    private val onItemListClickListener: OnItemListClickListener,
+class HistoryWeatherListAdapter(
     private var data: List<Weather> = listOf()
-): RecyclerView.Adapter<WeatherListAdapter.CityHolder>() {
+): RecyclerView.Adapter<HistoryWeatherListAdapter.CityHolder>() {
 
     fun setData(dataNew:List<Weather>){
         this.data = dataNew
@@ -19,7 +17,7 @@ class WeatherListAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CityHolder {
-        val binding = FragmentWeatherListRecyclerItemBinding.inflate(
+        val binding = FragmentHistoryWeatherListRecyclerItemBinding.inflate(
             LayoutInflater.from(parent.context),
             parent,
             false)
@@ -34,11 +32,11 @@ class WeatherListAdapter(
 
     inner class CityHolder(itemView: View):RecyclerView.ViewHolder(itemView){
         fun bind(weather: Weather){
-            FragmentWeatherListRecyclerItemBinding.bind(itemView).apply {
+            FragmentHistoryWeatherListRecyclerItemBinding.bind(itemView).apply {
                 tvCityName.text = weather.city.name
-                root.setOnClickListener{
-                    onItemListClickListener.onItemClick(weather)
-                }
+                tvTemperature.text = weather.temperature.toString()
+                tvFeels.text = weather.feelsLike.toString()
+                //TODO вывести картинку
             }
         }
     }

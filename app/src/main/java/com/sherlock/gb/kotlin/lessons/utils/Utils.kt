@@ -1,5 +1,6 @@
 package com.sherlock.gb.kotlin.lessons.utils
 
+import com.sherlock.gb.kotlin.lessons.domain.room.HistoryEntity
 import com.sherlock.gb.kotlin.lessons.repository.City
 import com.sherlock.gb.kotlin.lessons.repository.Weather
 import com.sherlock.gb.kotlin.lessons.repository.xdto.WeatherDTO
@@ -26,4 +27,14 @@ fun convertDtoToModel(weatherDTO: WeatherDTO):Weather{
         weatherDTO.current.tempC.toInt(),
         weatherDTO.current.feelslikeC.toInt(),
         weatherDTO.current.condition.icon)
+}
+
+fun convertHistoryEntityToWeather(entityList: List<HistoryEntity>):List<Weather>{
+    return entityList.map{
+        Weather(City(it.city,0.0,0.0),it.temperature,it.feelsLike,it.icon) //TODO HW lat, lon
+    }
+}
+
+fun convertWeatherToEntity(weather: Weather):HistoryEntity{
+    return HistoryEntity(0,weather.city.name,weather.temperature,weather.feelsLike,weather.icon)
 }

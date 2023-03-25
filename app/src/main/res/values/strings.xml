@@ -13,4 +13,5 @@
     <string name="calculate">Расчёт</string>
     <string name="default_number">3</string>
     <string name="threads">Threads</string>
+    <string name="history">history</string>
 </resources>

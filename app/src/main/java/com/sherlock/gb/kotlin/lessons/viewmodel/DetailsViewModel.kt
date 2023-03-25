@@ -6,8 +6,8 @@ import com.sherlock.gb.kotlin.lessons.repository.*
 
 class DetailsViewModel(
     private val liveData: MutableLiveData<DetailsState> = MutableLiveData(),
-    //private val repository: DetailsRepository = DetailsRepositoryOkHttpImpl()
-    private val repository: DetailsRepository = DetailsRepositoryRetrofit2Impl()
+    private val repository: DetailsRepositoryOne = DetailsRepositoryOneRetrofit2Impl(),
+    private val repositoryAdd: DetailsRepositoryAdd = DetailsRepositoryRoomImpl()
 ):ViewModel() {
 
     fun getLiveData() = liveData
@@ -17,6 +17,7 @@ class DetailsViewModel(
         repository.getWeatherDetails(city, object : Callback {
             override fun onResponse(weather: Weather) {
                 liveData.postValue(DetailsState.Success(weather))
+                repositoryAdd.addWeather(weather)
             }
 
             override fun onFail() {

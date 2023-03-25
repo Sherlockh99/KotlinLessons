@@ -10,7 +10,7 @@ import com.sherlock.gb.kotlin.lessons.utils.convertDtoToModel
 import com.sherlock.gb.kotlin.lessons.viewmodel.DetailsViewModel
 import okhttp3.*
 
-class DetailsRepositoryOkHttp2Impl:DetailsRepository {
+class DetailsRepositoryOneOkHttp2Impl:DetailsRepositoryOne {
     override fun getWeatherDetails(city: City, callback: DetailsViewModel.Callback) {
 
         val client = OkHttpClient()
