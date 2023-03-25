@@ -11,6 +11,5 @@ data class HistoryEntity (
     /*val timestamp: Long, TODO HW Primary Key city + timestamp ???*/
     val temperature: Int,
     val feelsLike: Int,
-    val icon: String){
-
-}
+    val icon: String,
+    val condition: String = "cloudy")
