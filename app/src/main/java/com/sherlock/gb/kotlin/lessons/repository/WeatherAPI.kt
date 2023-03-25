@@ -12,7 +12,7 @@ interface WeatherAPI {
     @GET(WEATHER_ENDPOINT) //only endpoint
     fun getWeather(@Header(WEATHER_KEY)apikey:String,
                    @Query(WEATHER_QUERY)query:String,
-                    @Query(WEATHER_LANG)lang:String
+                   @Query(WEATHER_LANG)lang:String
     ): Call<WeatherDTO>
 
 }

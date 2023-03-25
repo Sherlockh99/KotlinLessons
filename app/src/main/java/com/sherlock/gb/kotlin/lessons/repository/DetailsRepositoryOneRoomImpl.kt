@@ -13,7 +13,11 @@ class DetailsRepositoryRoomImpl: DetailsRepositoryOne,DetailsRepositoryAll,Detai
 
     override fun getWeatherDetails(city: City, callback: DetailsViewModel.Callback) {
         val list = convertHistoryEntityToWeather(MyApp.getHistoryDao().getHistoryForCity(city.name))
-        callback.onResponse(list.last())
+        if(list.isEmpty()) {
+            //callback.onFail()
+        }else{
+            callback.onResponse(list.last())
+        }
     }
 
     override fun addWeather(weather: Weather) {

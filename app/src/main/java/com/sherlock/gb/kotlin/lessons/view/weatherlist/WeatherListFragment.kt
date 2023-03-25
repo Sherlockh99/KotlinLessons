@@ -111,6 +111,9 @@ class WeatherListFragment : Fragment(), OnItemListClickListener {
          * при callback будет вызываться onChanged из observer
          */
         viewModel.getData().observe(viewLifecycleOwner,observer)
+        binding.floatingActionButton.setOnClickListener{
+            setupFab()
+        }
         setupFab()
 
         /**
@@ -118,22 +121,19 @@ class WeatherListFragment : Fragment(), OnItemListClickListener {
          * дальше сработает триггер onChanged после того,
          * как будет обновлена liveData в MainViewModel
          */
-        viewModel.getWeatherRussia()
+        //viewModel.getWeatherRussia()
     }
 
     private fun setupFab() {
-        binding.floatingActionButton.setOnClickListener{
-            isRussian = !isRussian
-            if(isRussian){
-                viewModel.getWeatherRussia()
-                binding.floatingActionButton.setImageResource(R.drawable.ic_earth)
-            }else{
-                viewModel.getWeatherWorld()
-                binding.floatingActionButton.setImageResource(R.drawable.ic_russia)
-            }
+        isRussian = !isRussian
+        if(isRussian){
+            viewModel.getWeatherRussia()
+            binding.floatingActionButton.setImageResource(R.drawable.ic_earth)
+        }else{
+            viewModel.getWeatherWorld()
+            binding.floatingActionButton.setImageResource(R.drawable.ic_russia)
         }
     }
-
 
     private fun renderData(data:AppState){
         when (data){
